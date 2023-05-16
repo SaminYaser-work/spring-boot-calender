@@ -4,8 +4,6 @@ import com.example.demo.model.Content;
 import com.example.demo.model.Status.Status;
 import com.example.demo.model.Type.Type;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
