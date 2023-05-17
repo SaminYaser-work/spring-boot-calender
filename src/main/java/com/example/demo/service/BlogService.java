@@ -52,9 +52,13 @@ public class BlogService {
         return blogRepository.findById(id).orElse(null);
     }
 
-    public User getUserById(Long id) {
-        Blog blog = getBlogById(id);
-        return blog.getUser();
+//    public User getUserById(Long id) {
+//        Blog blog = getBlogById(id);
+//        return blog.getUser();
+//    }
+
+    public List<Blog> getAllBlogbyUser(User user) {
+        return blogRepository.findAllBlogByUser(user);
     }
 
 //    public Blog getBlogWithUser(Long id) {

@@ -1,108 +1,45 @@
 package com.example.demo.model;
 
-import javax.annotation.PostConstruct;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User implements Serializable {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    public int id;
 
     private String username;
     private String password;
     private boolean active;
     private String roles;
 
-    @OneToMany(mappedBy = "user")
-    @Column(name = "blogs_posts")
-    private Set<Blog> blogsPosts = new HashSet<>();
 
-//
-//    public List<Blog> getBlogs() {
-//        return blogs;
-//    }
+    @OneToMany(targetEntity = Blog.class)
+    @JoinColumn(name = "fk_blogId", referencedColumnName = "id")
+//    @Column(name = "blogs_posts")
+    private List<Blog> blogposts;
 
-//    public void setBlogs(List<Blog> blogs) {
-//        this.blogs = blogs;
-//    }
-
-    public User() {}
-
-    public User(String username, String password, boolean active, String roles, Set<Blog> blogsPosts) {
+    public User(String username, String password, boolean active, String roles, List<Blog> blogPosts){
         this.username = username;
         this.password = password;
         this.active = active;
         this.roles = roles;
-        this.blogsPosts = blogsPosts;
+        this.blogposts = blogPosts;
     }
 
-    public Set<Blog> getBlogsPosts() {
-        return blogsPosts;
+    public void addBlogPost(Blog blogPost) {
+        this.blogposts.add(blogPost);
     }
 
-    public void setBlogsPosts(Set<Blog> blogsPosts) {
-        this.blogsPosts = blogsPosts;
-    }
-
-    public void addBlogPost(Blog blog) {
-        this.blogsPosts.add(blog);
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public String getRoles() {
-        return roles;
-    }
-
-    public void setRoles(String roles) {
-        this.roles = roles;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", active=" + active +
-                ", roles='" + roles + '\'' +
-                ", blogsPosts=" + blogsPosts +
-                '}';
-    }
 }

@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.IntStream;
 
 @Component
@@ -24,28 +22,26 @@ public class BlogDataLoader implements CommandLineRunner {
     public void run(String... args) throws Exception {
         Faker faker = new Faker();
 
-        Set<Blog> blogPosts = new HashSet<>();
+        List<Blog> blogPosts = new ArrayList<>();
 
-        // For loop to create 100 blogs
-         for (int i = 0; i < 100; i++) {
-             User user = new User(
-                     faker.name().fullName(),
-                     faker.internet().password(),
-                     true,
-                     "USER_ROLE",
-                     blogPosts
-             );
+         for (int i = 0; i < 30; i++) {
 
-             Blog blog = new Blog(
-                     faker.lorem().sentence(),
-                     faker.lorem().paragraph(),
-                     faker.date().between(new Date(System.currentTimeMillis() - 86400000L * 365), new Date()),
-                     user
-             );
+             User user = new User();
+             user.setUsername(faker.name().fullName());
+             user.setPassword(faker.internet().password());
+             user.setActive(true);
+             user.setRoles("USER_ROLE");
+             user.setBlogposts(blogPosts);
 
+
+             Blog blog = new Blog();
+                blog.setTitle(faker.lorem().sentence());
+                blog.setContent(faker.lorem().paragraph());
+                blog.setDate(faker.date().between(new Date(System.currentTimeMillis() - 86400000L * 365), new Date()));
+
+             blogRepository.save(blog);
              user.addBlogPost(blog);
              userRepository.save(user);
-             blogRepository.save(blog);
 
          }
 

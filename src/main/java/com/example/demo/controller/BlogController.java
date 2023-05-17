@@ -43,11 +43,19 @@ public class BlogController {
         return blogService.getAllBlogs(pr);
     }
 
-    @GetMapping("/{id}/user")
-    public User getAuthorForBook(@PathVariable Long id) {
-        User user = blogService.getUserById(id);
-        return user;
-    }
+//    @GetMapping("/{id}/user")
+//    public User getAuthorForBook(@PathVariable Long id) {
+//        User user = blogService.getUserById(id);
+//        return user;
+//    }
+
+//    @GetMapping("/user/{id}/blogs")
+//    public List<Blog> getBlogsByUser(@PathVariable Long id) {
+//        User user = blogService.getUserById(id);
+//
+//        return blogService.getAllBlogbyUser(user);
+//    }
+
 
 
     @GetMapping("/{id}")
@@ -63,12 +71,12 @@ public class BlogController {
 
     @PostMapping
     public ResponseEntity<Blog> saveBlog(@RequestBody BlogDto blogDto) {
-        Blog blog = new Blog(
-                blogDto.getTitle(),
-                blogDto.getContent(),
-                blogDto.getDate(),
-                blogDto.getUser()
-        );
+        Blog blog = new Blog();
+
+        blog.setTitle(blogDto.getTitle());
+        blog.setContent(blogDto.getContent());
+        blog.setDate(blogDto.getDate());
+
         blogService.createBlog(blog);
         return ResponseEntity.status(HttpStatus.CREATED).body(blog);
     }
