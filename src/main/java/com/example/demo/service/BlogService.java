@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import com.example.demo.controller.BlogDto;
 import com.example.demo.model.Blog;
-import com.example.demo.model.User;
 import com.example.demo.repository.BlogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,6 +24,10 @@ public class BlogService {
         return blogRepository.findAll(pr);
     }
 
+//    public List<Blog> getAllBlogsWithUsername(int id) {
+//        return blogRepository.findAllBlogWithUsername(id);
+//    }
+
     public void createBlog(Blog blog) {
         blogRepository.save(blog);
     }
@@ -39,7 +42,6 @@ public class BlogService {
 
         if (blogRes.isPresent()) {
             Blog existingBlog = blogRes.get();
-//            existingBlog.setUser(blog.getUser());
             existingBlog.setTitle(blog.getTitle());
             existingBlog.setContent(blog.getContent());
             blogRepository.save(existingBlog);
@@ -48,20 +50,11 @@ public class BlogService {
         return ResponseEntity.notFound().build();
     }
 
+    public List<Object[]> getAllBlogsWithUsername() {
+        return blogRepository.findAllBlogsWithUsernames();
+    }
+
     public Blog getBlogById(int id) {
         return blogRepository.findById(id).orElse(null);
     }
-
-//    public User getUserById(Long id) {
-//        Blog blog = getBlogById(id);
-//        return blog.getUser();
-//    }
-
-    public List<Blog> getAllBlogbyUser(User user) {
-        return blogRepository.findAllBlogByUser(user);
-    }
-
-//    public Blog getBlogWithUser(Long id) {
-//        return blogRepository.findByIdWithAuthor(id);
-//    }
 }

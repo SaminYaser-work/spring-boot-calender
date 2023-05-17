@@ -1,23 +1,21 @@
 package com.example.demo.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
 @Data
+@Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     public int id;
 
     private String username;
@@ -26,9 +24,11 @@ public class User {
     private String roles;
 
 
-    @OneToMany(targetEntity = Blog.class, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "fk_blogId", referencedColumnName = "id")
+    @OneToMany(targetEntity = Blog.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(referencedColumnName = "id", name = "fk_user_id")
 //    @Column(name = "blogs_posts")
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     private List<Blog> blogposts = new ArrayList<>();
 
     public User(String username, String password, boolean active, String roles, List<Blog> blogPosts){

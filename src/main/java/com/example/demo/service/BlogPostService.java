@@ -6,18 +6,17 @@ import com.example.demo.model.User;
 import com.example.demo.repository.BlogRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
+@Service
 public class BlogPostService {
 
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private BlogRepository blogRepository;
-
-    @Autowired
-    private UserService userService;
 
     public void postBlog(int userId, AddNewBlogRequest req) {
         User user = userRepository.findById(userId).orElse(null);
@@ -27,6 +26,7 @@ public class BlogPostService {
             blog.setTitle(req.getBlogTitle());
             blog.setContent(req.getBlogContent());
             blog.setDate(new Date());
+            blog.setAuthor(user.getUsername());
             blogRepository.save(blog);
             user.addBlogPost(blog);
             userRepository.save(user);

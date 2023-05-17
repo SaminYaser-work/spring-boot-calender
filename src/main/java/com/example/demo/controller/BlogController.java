@@ -8,7 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 @RestController
 @CrossOrigin
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class BlogController {
 
     @Autowired
+
     private final BlogService blogService;
 
     public BlogController(BlogService blogService) {
@@ -27,6 +32,27 @@ public class BlogController {
         return blogService.getAllBlogs();
     }
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
+//    @GetMapping("/with-users")
+//    public List<Object[]> getAllBlogsWithUsername() {
+//
+//        String queryString = "SELECT b.content, b.title, b.date, u.username " +
+//                "FROM com.example.demo.model.Blog b LEFT JOIN com.example.demo.model.User u " +
+//                "b u";
+//
+////        String queryString = "SELECT b.content, b.title, b.date From com.example.demo.model.Blog b";
+//
+//        List<Object[]> res = entityManager.createQuery(queryString, Object[].class).getResultList();
+//
+//        return res;
+//    }
+
+    @GetMapping("/with-users")
+    public List<Object[]> getAllBlogsWithUsername() {
+        return blogService.getAllBlogsWithUsername();
+    }
 
     @GetMapping("/page/{start}/{size}")
     public Page<Blog> findAll(@PathVariable int start, @PathVariable int size) {

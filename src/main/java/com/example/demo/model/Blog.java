@@ -1,10 +1,8 @@
 package com.example.demo.model;
 
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,10 +12,12 @@ import java.util.Date;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "blog")
 public class Blog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 
     private String title;
@@ -25,24 +25,8 @@ public class Blog {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    private String author;
 
     private Date date;
-
-    // Null user
-//    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-//    @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "author_id", nullable = false, referencedColumnName = "id")
-//    private transient User user;
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "author_id", nullable = false)
-//    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-//    private User user;
-
-//    public Blog(String title, String content, Date date) {
-//        this.title = title;
-//        this.content = content;
-//        this.date = date;
-//    }
 }
 
