@@ -7,6 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 //}
 
 import com.example.demo.model.Blog;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
@@ -14,7 +17,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface BlogRepository extends JpaRepository<User, Long> {
+public interface BlogRepository extends JpaRepository<Blog, Long> {
+//    @Query("SELECT b FROM Blog b JOIN FETCH b.author_id WHERE b.id = :id")
+//    Blog findByIdWithAuthor(@Param("id") Long id);
+
 }
 
 //@Repository

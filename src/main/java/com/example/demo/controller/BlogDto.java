@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.User;
+
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -10,17 +12,32 @@ public class BlogDto {
     private String author;
     private Date date;
 
+    private User user;
+
     public BlogDto() {
     }
 
-    public BlogDto(String title, String content, String author, Date date) {
+    public BlogDto(String title, String content, Date date) {
         this.title = title;
         this.content = content;
-        this.author = author;
         this.date = date;
+//        this.user = user;
     }
 
-    // getters and setters
+    public BlogDto(String title, String content, Date date, User user) {
+        this.title = title;
+        this.content = content;
+        this.date = date;
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public String getTitle() {
         return title;

@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.demo.model.Blog;
+import com.example.demo.model.User;
 import com.example.demo.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,52 +19,71 @@ import org.springframework.web.bind.annotation.*;
 public class BlogController {
 
     @Autowired
-    private BlogService blogService;
+    private final BlogService blogService;
+
+    public BlogController(BlogService blogService) {
+        this.blogService = blogService;
+    }
 
     @GetMapping
     public List<Blog> getAllBlogs() {
         return blogService.getAllBlogs();
     }
 
-    @GetMapping("/page/{start}")
-    public List<Blog> getAllBlogsPaging(@PathVariable Integer start) {
-        return blogService.getAllBlogsPaging(start);
+//    @GetMapping
+//    public List<Blog> getAllBlogs(@RequestParam(required = false) boolean getUser) {
+//        return blogService.getBlogWithUser();
+//    }
+
+
+    @GetMapping("/page/{start}/{size}")
+    public Page<Blog> findAll(@PathVariable int start, @PathVariable int size) {
+        PageRequest pr = PageRequest.of(start, size);
+
+        return blogService.getAllBlogs(pr);
     }
+
+    @GetMapping("/{id}/user")
+    public User getAuthorForBook(@PathVariable Long id) {
+        User user = blogService.getUserById(id);
+        return user;
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Blog> getBlogById(@PathVariable Long id) {
-        Optional<Blog> blog = blogService.getBlogById(id);
-        return blog.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+        Blog blog = blogService.getBlogById(id);
+
+        if (blog == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(blog);
     }
 
     @PostMapping
     public ResponseEntity<Blog> saveBlog(@RequestBody BlogDto blogDto) {
-        Blog blog = new Blog(blogDto.getTitle(), blogDto.getContent(),
-                blogDto.getAuthor(), blogDto.getDate());
-        blogService.saveBlog(blog);
+        Blog blog = new Blog(
+                blogDto.getTitle(),
+                blogDto.getContent(),
+                blogDto.getDate(),
+                blogDto.getUser()
+        );
+        blogService.createBlog(blog);
         return ResponseEntity.status(HttpStatus.CREATED).body(blog);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Blog> updateBlog(@PathVariable Long id, @RequestBody BlogDto blogDto) {
-        Optional<Blog> existingBlog = blogService.getBlogById(id);
-        if (existingBlog.isPresent()) {
-            Blog blog = existingBlog.get();
-            blog.setTitle(blogDto.getTitle());
-            blog.setContent(blogDto.getContent());
-            blog.setAuthor(blogDto.getAuthor());
-            blog.setDate(blogDto.getDate());
-            blogService.updateBlog(blog, id);
-            return ResponseEntity.ok(blog);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        blogService.updateBlog(id, blogDto);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBlog(@PathVariable Long id) {
-        Optional<Blog> existingBlog = blogService.getBlogById(id);
-        if (existingBlog.isPresent()) {
+        Blog existingBlog = blogService.getBlogById(id);
+
+        if (existingBlog != null) {
             blogService.deleteBlog(id);
             return ResponseEntity.noContent().build();
         } else {
