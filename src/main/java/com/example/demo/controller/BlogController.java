@@ -59,7 +59,7 @@ public class BlogController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Blog> getBlogById(@PathVariable Long id) {
+    public ResponseEntity<Blog> getBlogById(@PathVariable int id) {
         Blog blog = blogService.getBlogById(id);
 
         if (blog == null) {
@@ -82,13 +82,13 @@ public class BlogController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Blog> updateBlog(@PathVariable Long id, @RequestBody BlogDto blogDto) {
+    public ResponseEntity<Blog> updateBlog(@PathVariable int id, @RequestBody BlogDto blogDto) {
         blogService.updateBlog(id, blogDto);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBlog(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteBlog(@PathVariable int id) {
         Blog existingBlog = blogService.getBlogById(id);
 
         if (existingBlog != null) {

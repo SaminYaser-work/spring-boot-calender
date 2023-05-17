@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface BlogRepository extends JpaRepository<Blog, Long> {
+public interface BlogRepository extends JpaRepository<Blog, Integer> {
 //    @Query("SELECT b FROM Blog b JOIN FETCH b.author_id WHERE b.id = :id")
 //    Blog findByIdWithAuthor(@Param("id") Long id);
 

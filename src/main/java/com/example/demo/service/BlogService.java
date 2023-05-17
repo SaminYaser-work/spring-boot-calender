@@ -29,11 +29,11 @@ public class BlogService {
         blogRepository.save(blog);
     }
 
-    public void deleteBlog(Long id) {
+    public void deleteBlog(int id) {
         blogRepository.deleteById(id);
     }
 
-    public ResponseEntity<Object> updateBlog(Long id, BlogDto blog) {
+    public ResponseEntity<Object> updateBlog(int id, BlogDto blog) {
 
         Optional<Blog> blogRes = blogRepository.findById(id);
 
@@ -48,7 +48,7 @@ public class BlogService {
         return ResponseEntity.notFound().build();
     }
 
-    public Blog getBlogById(Long id) {
+    public Blog getBlogById(int id) {
         return blogRepository.findById(id).orElse(null);
     }
 

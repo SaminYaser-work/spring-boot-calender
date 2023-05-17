@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,10 +26,10 @@ public class User {
     private String roles;
 
 
-    @OneToMany(targetEntity = Blog.class)
+    @OneToMany(targetEntity = Blog.class, cascade = CascadeType.MERGE)
     @JoinColumn(name = "fk_blogId", referencedColumnName = "id")
 //    @Column(name = "blogs_posts")
-    private List<Blog> blogposts;
+    private List<Blog> blogposts = new ArrayList<>();
 
     public User(String username, String password, boolean active, String roles, List<Blog> blogPosts){
         this.username = username;
