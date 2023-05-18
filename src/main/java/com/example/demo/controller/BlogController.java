@@ -10,6 +10,7 @@ import com.example.demo.util.BlogWithNamesResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -53,9 +54,9 @@ public class BlogController {
         return response;
     }
 
-    @GetMapping("/page/{start}/{size}")
-    public Page<Blog> findAll(@PathVariable int start, @PathVariable int size) {
-        PageRequest pr = PageRequest.of(start, size);
+    @GetMapping("/page/{start}/{size}/{sortBy}")
+    public Page<Blog> findAll(@PathVariable int start, @PathVariable int size, @PathVariable String sortBy) {
+        PageRequest pr = PageRequest.of(start, size, Sort.by(sortBy));
 
         return blogService.getAllBlogs(pr);
     }
