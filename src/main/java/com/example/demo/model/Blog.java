@@ -9,7 +9,6 @@ import java.util.Date;
 
 @Entity
 @Data
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "blog")
@@ -24,8 +23,6 @@ public class Blog {
 
     @Column(columnDefinition = "TEXT")
     private String content;
-
-    private String author;
 
     private Date date;
 }

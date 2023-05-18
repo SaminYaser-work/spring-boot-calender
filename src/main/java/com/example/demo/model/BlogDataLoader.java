@@ -31,17 +31,15 @@ public class BlogDataLoader implements CommandLineRunner {
 
          for (int i = 0; i < 30; i++) {
 
-             String fakeName = faker.name().fullName();
 
              Blog blog = new Blog();
-                blog.setTitle(faker.lorem().sentence());
-                blog.setContent(faker.lorem().paragraph());
-                blog.setDate(faker.date().between(new Date(System.currentTimeMillis() - 86400000L * 365), new Date()));
-                blog.setAuthor(fakeName);
+             blog.setTitle(faker.lorem().sentence());
+             blog.setContent(faker.lorem().paragraph());
+             blog.setDate(faker.date().between(new Date(System.currentTimeMillis() - 86400000L * 365), new Date()));
 
 
              User user = new User();
-             user.setUsername(fakeName);
+             user.setUsername(faker.name().username());
              user.setPassword(faker.internet().password());
              user.setActive(true);
              user.setRoles("USER_ROLE");
@@ -55,13 +53,10 @@ public class BlogDataLoader implements CommandLineRunner {
 
              User savedUser = userRepository.findById(user.getId()).get();
 
-             savedUser.addBlogPost(savedBlog);
-
-//             savedBlog.setUser(savedUser);
-//             blogRepository.save(savedBlog);
+//             savedUser.addBlog(savedBlog);
+             savedUser.getBlogposts().add(savedBlog);
 
              userRepository.save(savedUser);
-
          }
 
 

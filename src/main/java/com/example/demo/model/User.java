@@ -1,9 +1,13 @@
 package com.example.demo.model;
 
 import lombok.*;
+import org.hibernate.annotations.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,24 +27,13 @@ public class User {
     private boolean active;
     private String roles;
 
-
     @OneToMany(targetEntity = Blog.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "id", name = "fk_user_id")
-//    @Column(name = "blogs_posts")
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
+//    @Getter(AccessLevel.NONE) // Uncomment to lazy load
+//    @Setter(AccessLevel.NONE)
     private List<Blog> blogposts = new ArrayList<>();
 
-    public User(String username, String password, boolean active, String roles, List<Blog> blogPosts){
-        this.username = username;
-        this.password = password;
-        this.active = active;
-        this.roles = roles;
-        this.blogposts = blogPosts;
-    }
-
-    public void addBlogPost(Blog blogPost) {
-        this.blogposts.add(blogPost);
-    }
-
+//    public void addBlog(Blog blog) {
+//        blogposts.add(blog);
+//    }
 }

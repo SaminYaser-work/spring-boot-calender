@@ -4,10 +4,14 @@ import com.example.demo.dto.AddNewUserRequest;
 import com.example.demo.model.Blog;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -22,7 +26,20 @@ public class UserController {
 
     @GetMapping
     public List<User> getAllUsers() {
-        return userService.getAllUsers();
+
+//        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+//        Session s = sessionFactory.openSession();
+//        Transaction tx = s.beginTransaction();
+
+        List<User> users = userService.getAllUsers();
+
+//        tx.commit();
+//        s.close();
+
+
+
+
+        return users;
     }
 
     @PostMapping

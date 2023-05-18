@@ -26,9 +26,8 @@ public class BlogPostService {
             blog.setTitle(req.getBlogTitle());
             blog.setContent(req.getBlogContent());
             blog.setDate(new Date());
-            blog.setAuthor(user.getUsername());
             blogRepository.save(blog);
-            user.addBlogPost(blog);
+            user.getBlogposts().add(blog);
             userRepository.save(user);
         }
     }
