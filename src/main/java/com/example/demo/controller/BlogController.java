@@ -1,13 +1,9 @@
 package com.example.demo.controller;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import com.example.demo.model.Blog;
 import com.example.demo.service.BlogService;
-import com.example.demo.util.BlogWithNamesResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,8 +28,9 @@ public class BlogController {
 
     @GetMapping("/search")
     public Page<Blog> searchByTopic(
-            @RequestParam(required = false) String topic,
+            @RequestParam(required = false) Integer[] topics,
             @RequestParam(required = false) String title,
+            @RequestParam(required = false) String content,
             @RequestParam(required = false, defaultValue = "0") String start,
             @RequestParam(required = false, defaultValue = "5") String size,
             @RequestParam(required = false, defaultValue = "id", name = "sort") String sortBy,
@@ -41,19 +38,29 @@ public class BlogController {
     ) {
 
         Sort sort = desc.equals("true") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+
         Pageable pr = PageRequest.of(
                 Integer.parseInt(start),
                 Integer.parseInt(size),
                 sort
         );
 
-        if(title != null && topic != null) {
-            return blogService.searchByTopicAndTitle(topic.toLowerCase(), title, pr);
-        }
-        else if (topic != null) {
-            return blogService.searchByTopic(topic.toLowerCase(), pr);
-        }
-        return blogService.searchByTitle(title, pr);
+        return blogService.searchByTopicTitleContent(
+                topics[0],
+                title,
+                content,
+                pr
+        );
+
+//        if(title != null && topics != null) {
+//            return blogService.searchByTopicOrTitle(topics[0], title, pr);
+//        }
+//
+//        else if (topics != null) {
+//            return blogService.searchByTopic(topics[0], pr);
+//        }
+//
+//        return blogService.searchByTitle(title, pr);
     }
 
 //    @GetMapping

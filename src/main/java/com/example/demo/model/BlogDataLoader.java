@@ -4,7 +4,6 @@ import com.example.demo.repository.BlogRepository;
 import com.example.demo.repository.TopicRepository;
 import com.example.demo.repository.UserRepository;
 import com.github.javafaker.Faker;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -49,21 +48,18 @@ public class BlogDataLoader implements CommandLineRunner {
 
          for (int i = 0; i < 30; i++) {
 
-
              Blog blog = new Blog();
              blog.setTitle(faker.lorem().sentence());
              blog.setContent(faker.lorem().paragraph());
              blog.setDate(faker.date().between(new Date(System.currentTimeMillis() - 86400000L * 365), new Date()));
 
-             if (rand.nextInt() > 30){
+             if (rand.nextInt(5) > 1 ){
                  blog.setTopic(
                          topicList.get(rand.nextInt(topicList.size()))
                  );
+             } else {
+                 blog.setTopic(null);
              }
-
-             blog.setTopic(
-                     topicList.get(rand.nextInt(topicList.size()))
-             );
 
 
              User user = new User();
@@ -71,7 +67,6 @@ public class BlogDataLoader implements CommandLineRunner {
              user.setPassword(faker.internet().password());
              user.setActive(true);
              user.setRoles("USER_ROLE");
-
 
              blogRepository.save(blog);
 
@@ -81,7 +76,6 @@ public class BlogDataLoader implements CommandLineRunner {
 
              User savedUser = userRepository.findById(user.getId()).get();
 
-//             savedUser.addBlog(savedBlog);
              savedUser.getBlogposts().add(savedBlog);
 
              userRepository.save(savedUser);

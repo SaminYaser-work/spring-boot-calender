@@ -4,16 +4,18 @@ import java.util.Optional;
 
 import com.example.demo.controller.BlogDto;
 import com.example.demo.model.Blog;
-import com.example.demo.model.Topic;
 import com.example.demo.repository.BlogRepository;
+import com.example.demo.repository.BlogSpecs;
 import com.example.demo.repository.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service
 public class BlogService {
@@ -65,17 +67,32 @@ public class BlogService {
         return blogRepository.findById(id).orElse(null);
     }
 
-    public Page<Blog> searchByTopic(String topicName, Pageable pr) {
-        Integer searchedTopicId = topicRepository.findByTopicName(topicName);
-        return blogRepository.findBlogWithTopic(searchedTopicId, pr);
+    public Page<Blog> searchByTopic(Integer topicId, Pageable pr) {
+        return blogRepository.findBlogWithTopic(topicId, pr);
     }
 
-    public Page<Blog> searchByTitle(String title, Pageable pr) {
-        return blogRepository.findByTitle(title, pr);
-    }
 
-    public Page<Blog> searchByTopicAndTitle(String topicName, String title, Pageable pr) {
-        Integer searchedTopicId = topicRepository.findByTopicName(topicName);
-        return blogRepository.findBlogWithTopicAndTitle(searchedTopicId, title, pr);
+//    public Page<Blog> searchByTitle(String title, Pageable pr) {
+//        return blogRepository.findAll(
+//                where(hasTitle(title)).or(hasContent(title)),
+//                pr
+//        );
+//    }
+
+    public Page<Blog> searchByTopicTitleContent(
+            Integer topicId,
+            String title,
+            String content,
+            Pageable pr
+    ) {
+//        Integer searchedTopicId = topicRepository.findByTopicName(topicId);
+//        return blogRepository.findBlogWithTopicAndTitle(topicId, title, pr);
+
+        return blogRepository.findAll(
+                where(BlogSpecs.hasTopic(topicId))
+                        .or(BlogSpecs.hasContent(content))
+                        .or(BlogSpecs.hasTitle(title)),
+                pr
+        );
     }
 }
