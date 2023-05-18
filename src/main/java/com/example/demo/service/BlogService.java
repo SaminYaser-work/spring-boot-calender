@@ -4,10 +4,14 @@ import java.util.Optional;
 
 import com.example.demo.controller.BlogDto;
 import com.example.demo.model.Blog;
+import com.example.demo.model.Topic;
 import com.example.demo.repository.BlogRepository;
+import com.example.demo.repository.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +19,9 @@ import org.springframework.stereotype.Service;
 public class BlogService {
     @Autowired
     private BlogRepository blogRepository;
+
+    @Autowired
+    private TopicRepository topicRepository;
 
     public List<Blog> getAllBlogs() {
         return (List<Blog>) blogRepository.findAll();
@@ -56,5 +63,14 @@ public class BlogService {
 
     public Blog getBlogById(int id) {
         return blogRepository.findById(id).orElse(null);
+    }
+
+    public Page<Blog> searchByTopic(String topicName, Pageable pr) {
+        Integer searchedTopicId = topicRepository.findByTopicName(topicName);
+        return blogRepository.findBlogWithTopic(searchedTopicId, pr);
+    }
+
+    public Page<Blog> searchByTitle(String title, Pageable pr) {
+        return blogRepository.findByTitle(title, pr);
     }
 }

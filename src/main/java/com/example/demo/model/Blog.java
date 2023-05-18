@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import java.util.Date;
 
@@ -25,5 +26,10 @@ public class Blog {
     private String content;
 
     private Date date;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_topic_id", referencedColumnName = "id", nullable = true)
+    private Topic topic;
 }
 

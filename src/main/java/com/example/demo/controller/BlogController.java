@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import com.example.demo.model.Blog;
 import com.example.demo.service.BlogService;
@@ -10,13 +11,11 @@ import com.example.demo.util.BlogWithNamesResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 @RestController
 @CrossOrigin
@@ -24,35 +23,52 @@ import javax.persistence.PersistenceContext;
 public class BlogController {
 
     @Autowired
+    private BlogService blogService;
 
-    private final BlogService blogService;
+    @GetMapping
+    public List<Blog> getAllBlogs() {
+        return blogService.getAllBlogs();
+    }
 
-    public BlogController(BlogService blogService) {
-        this.blogService = blogService;
+    @GetMapping("/search")
+    public Page<Blog> searchByTopic(
+            @RequestParam(required = false) String topic,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false, defaultValue = "0") String start,
+            @RequestParam(required = false, defaultValue = "5") String size,
+            @RequestParam(required = false, defaultValue = "id", name = "sort") String sortBy,
+            @RequestParam(required = false, defaultValue = "false") String desc
+    ) {
+
+        Sort sort = desc.equals("true") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Pageable pr = PageRequest.of(
+                Integer.parseInt(start),
+                Integer.parseInt(size),
+                sort
+        );
+        if(title == null) {
+            return blogService.searchByTopic(topic.toLowerCase(), pr);
+        }
+        return blogService.searchByTitle(title.toLowerCase(), pr);
     }
 
 //    @GetMapping
-//    public List<Blog> getAllBlogs() {
-//        return blogService.getAllBlogs();
+//    public List<BlogWithNamesResponse> getAllBlogsWithUsername(@RequestParam String author) {
+//
+//        List<Object[]> res = blogService.getAllBlogsWithUsername();
+//
+//        List<BlogWithNamesResponse> response = new ArrayList<>();
+//        for(Object[] obj : res) {
+//            BlogWithNamesResponse resp = new BlogWithNamesResponse();
+//            resp.setTitle((String) obj[0]);
+//            resp.setAuthor((String) obj[1]);
+//            resp.setContent((String) obj[2]);
+//            resp.setDate((Date) obj[3]);
+//            response.add(resp);
+//        }
+//
+//        return response;
 //    }
-
-    @GetMapping
-    public List<BlogWithNamesResponse> getAllBlogsWithUsername(@RequestParam boolean author) {
-
-        List<Object[]> res = blogService.getAllBlogsWithUsername();
-
-        List<BlogWithNamesResponse> response = new ArrayList<>();
-        for(Object[] obj : res) {
-            BlogWithNamesResponse resp = new BlogWithNamesResponse();
-            resp.setTitle((String) obj[0]);
-            resp.setAuthor((String) obj[1]);
-            resp.setContent((String) obj[2]);
-            resp.setDate((Date) obj[3]);
-            response.add(resp);
-        }
-
-        return response;
-    }
 
     @GetMapping("/page/{start}/{size}/{sortBy}")
     public Page<Blog> findAll(@PathVariable int start, @PathVariable int size, @PathVariable String sortBy) {
