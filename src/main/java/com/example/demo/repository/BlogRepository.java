@@ -22,7 +22,7 @@ public interface BlogRepository extends JpaRepository<Blog, Integer> {
 //    @Query(value = "select b.content, b.title, b.date, u.username  from blog b left join users u on b.fk_blog_id = u.id",
 //    nativeQuery = true)
 //    @Query("SELECT b.content, b.title, b.date, u.username FROM Blog b LEFT JOIN User u ON b.fk_user_id = u.id")
-    String q = "SELECT b.content, b.title, b.date, u.username FROM blog b LEFT JOIN users u ON b.fk_user_id = u.id";
+    String q = "SELECT b.title, u.username, b.content, b.date FROM blog b LEFT JOIN users u ON b.fk_user_id = u.id";
     @Query(value = q, nativeQuery = true)
     List<Object[]> findAllBlogsWithUsernames();
 

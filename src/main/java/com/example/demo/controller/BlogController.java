@@ -1,9 +1,12 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.example.demo.model.Blog;
 import com.example.demo.service.BlogService;
+import com.example.demo.util.BlogWithNamesResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,31 +30,27 @@ public class BlogController {
         this.blogService = blogService;
     }
 
-    @GetMapping
-    public List<Blog> getAllBlogs() {
-        return blogService.getAllBlogs();
-    }
-
-    @PersistenceContext
-    private EntityManager entityManager;
-
-//    @GetMapping("/with-users")
-//    public List<Object[]> getAllBlogsWithUsername() {
-//
-//        String queryString = "SELECT b.content, b.title, b.date, u.username " +
-//                "FROM com.example.demo.model.Blog b LEFT JOIN com.example.demo.model.User u " +
-//                "b u";
-//
-////        String queryString = "SELECT b.content, b.title, b.date From com.example.demo.model.Blog b";
-//
-//        List<Object[]> res = entityManager.createQuery(queryString, Object[].class).getResultList();
-//
-//        return res;
+//    @GetMapping
+//    public List<Blog> getAllBlogs() {
+//        return blogService.getAllBlogs();
 //    }
 
-    @GetMapping("/with-users")
-    public List<Object[]> getAllBlogsWithUsername() {
-        return blogService.getAllBlogsWithUsername();
+    @GetMapping
+    public List<BlogWithNamesResponse> getAllBlogsWithUsername(@RequestParam boolean author) {
+
+        List<Object[]> res = blogService.getAllBlogsWithUsername();
+
+        List<BlogWithNamesResponse> response = new ArrayList<>();
+        for(Object[] obj : res) {
+            BlogWithNamesResponse resp = new BlogWithNamesResponse();
+            resp.setTitle((String) obj[0]);
+            resp.setAuthor((String) obj[1]);
+            resp.setContent((String) obj[2]);
+            resp.setDate((Date) obj[3]);
+            response.add(resp);
+        }
+
+        return response;
     }
 
     @GetMapping("/page/{start}/{size}")
