@@ -46,10 +46,14 @@ public class BlogController {
                 Integer.parseInt(size),
                 sort
         );
-        if(title == null) {
+
+        if(title != null && topic != null) {
+            return blogService.searchByTopicAndTitle(topic.toLowerCase(), title, pr);
+        }
+        else if (topic != null) {
             return blogService.searchByTopic(topic.toLowerCase(), pr);
         }
-        return blogService.searchByTitle(title.toLowerCase(), pr);
+        return blogService.searchByTitle(title, pr);
     }
 
 //    @GetMapping

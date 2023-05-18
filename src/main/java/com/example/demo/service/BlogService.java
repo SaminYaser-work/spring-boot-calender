@@ -73,4 +73,9 @@ public class BlogService {
     public Page<Blog> searchByTitle(String title, Pageable pr) {
         return blogRepository.findByTitle(title, pr);
     }
+
+    public Page<Blog> searchByTopicAndTitle(String topicName, String title, Pageable pr) {
+        Integer searchedTopicId = topicRepository.findByTopicName(topicName);
+        return blogRepository.findBlogWithTopicAndTitle(searchedTopicId, title, pr);
+    }
 }

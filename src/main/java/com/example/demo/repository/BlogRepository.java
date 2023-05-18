@@ -20,4 +20,11 @@ public interface BlogRepository extends JpaRepository<Blog, Integer> {
 
     @Query("SELECT b FROM com.example.demo.model.Blog b WHERE b.title LIKE %:title%")
     Page<Blog> findByTitle(@Param("title") String title, Pageable page);
+
+    @Query("SELECT b FROM com.example.demo.model.Blog b WHERE b.topic.id = :topicId AND b.title LIKE %:title%")
+    Page<Blog> findBlogWithTopicAndTitle(
+            @Param("topicId") Integer topicId,
+            @Param("title") String title,
+            Pageable page
+    );
 }
