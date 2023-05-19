@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
@@ -28,14 +29,15 @@ public class Blog {
 
     private Date date;
 
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_topic_id", referencedColumnName = "id", nullable = true)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Topic.class)
+//    @JoinColumn(referencedColumnName = "id", nullable = true)
+//    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+//    @JsonBackReference
+    @JsonIgnoreProperties({
+            "blogs",
+            "hibernateLazyInitializer",
+            "handler"
+    })
     private Topic topic;
-
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private Integer topicId;
 }
 

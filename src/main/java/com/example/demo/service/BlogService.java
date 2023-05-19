@@ -5,13 +5,12 @@ import java.util.Optional;
 import com.example.demo.controller.BlogDto;
 import com.example.demo.model.Blog;
 import com.example.demo.repository.BlogRepository;
-import com.example.demo.repository.BlogSpecs;
+import com.example.demo.repository.specifications.BlogSpecs;
 import com.example.demo.repository.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -71,27 +70,17 @@ public class BlogService {
         return blogRepository.findBlogWithTopic(topicId, pr);
     }
 
-
-//    public Page<Blog> searchByTitle(String title, Pageable pr) {
-//        return blogRepository.findAll(
-//                where(hasTitle(title)).or(hasContent(title)),
-//                pr
-//        );
-//    }
-
     public Page<Blog> searchByTopicTitleContent(
             Integer topicId,
             String title,
             String content,
             Pageable pr
     ) {
-//        Integer searchedTopicId = topicRepository.findByTopicName(topicId);
-//        return blogRepository.findBlogWithTopicAndTitle(topicId, title, pr);
 
         return blogRepository.findAll(
-                where(BlogSpecs.hasTopic(topicId))
+                where(BlogSpecs.hasTitle(title))
                         .or(BlogSpecs.hasContent(content))
-                        .or(BlogSpecs.hasTitle(title)),
+                        .or(BlogSpecs.hasTopic(topicId)),
                 pr
         );
     }

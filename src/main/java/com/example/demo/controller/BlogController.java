@@ -28,7 +28,7 @@ public class BlogController {
 
     @GetMapping("/search")
     public Page<Blog> searchByTopic(
-            @RequestParam(required = false) Integer[] topics,
+            @RequestParam(required = false) int[] topics,
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String content,
             @RequestParam(required = false, defaultValue = "0") String start,
@@ -36,6 +36,10 @@ public class BlogController {
             @RequestParam(required = false, defaultValue = "id", name = "sort") String sortBy,
             @RequestParam(required = false, defaultValue = "false") String desc
     ) {
+
+        if (topics == null) {
+            topics = new int[]{0};
+        }
 
         Sort sort = desc.equals("true") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
 

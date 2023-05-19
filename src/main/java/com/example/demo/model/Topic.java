@@ -1,13 +1,17 @@
 package com.example.demo.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Topic {
@@ -17,4 +21,9 @@ public class Topic {
 
     @Column(name = "topic_name")
     private String topicName;
+    
+    @OneToMany(targetEntity = Blog.class, mappedBy = "topic", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    @JsonIgnoreProperties("topic")
+    private List<Blog> blogs = new ArrayList();
 }
