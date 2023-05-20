@@ -28,18 +28,18 @@ public class BlogController {
 
     @GetMapping("/search")
     public Page<Blog> searchByTopic(
-            @RequestParam(required = false) int[] topics,
-            @RequestParam(required = false) String title,
-            @RequestParam(required = false) String content,
+            @RequestParam(required = false) List<Integer> topics,
+            @RequestParam(required = false, defaultValue = "") String title,
+            @RequestParam(required = false, defaultValue = "") String content,
             @RequestParam(required = false, defaultValue = "0") String start,
             @RequestParam(required = false, defaultValue = "5") String size,
             @RequestParam(required = false, defaultValue = "id", name = "sort") String sortBy,
             @RequestParam(required = false, defaultValue = "false") String desc
     ) {
 
-        if (topics == null) {
-            topics = new int[]{0};
-        }
+//        if (topics == null) {
+//            topics = new List<Integer>();
+//        }
 
         Sort sort = desc.equals("true") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
 
@@ -50,21 +50,18 @@ public class BlogController {
         );
 
         return blogService.searchByTopicTitleContent(
-                topics[0],
+                topics,
                 title,
                 content,
                 pr
         );
 
-//        if(title != null && topics != null) {
-//            return blogService.searchByTopicOrTitle(topics[0], title, pr);
-//        }
-//
-//        else if (topics != null) {
-//            return blogService.searchByTopic(topics[0], pr);
-//        }
-//
-//        return blogService.searchByTitle(title, pr);
+//        return blogService.searchByTopicOrTitleOrContent(
+//                topics[0],
+//                title,
+//                content,
+//                pr
+//        );
     }
 
 //    @GetMapping

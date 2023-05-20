@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 import com.example.demo.model.Blog;
+import com.example.demo.model.Topic;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -17,17 +18,19 @@ public interface BlogRepository extends JpaRepository<Blog, Integer>, JpaSpecifi
     @Query(value = q, nativeQuery = true)
     List<Object[]> findAllBlogsWithUsernames();
 
-    @Query("SELECT b FROM com.example.demo.model.Blog b WHERE b.topic.id = :topicId")
-    Page<Blog> findBlogWithTopic(@Param("topicId") Integer topicId, Pageable page);
+//    @Query("SELECT b FROM com.example.demo.model.Blog b WHERE b.topic.id = :topicId")
+//    Page<Blog> findBlogWithTopic(@Param("topicId") Integer topicId, Pageable page);
+//
+//    @Query("SELECT b FROM com.example.demo.model.Blog b WHERE b.title LIKE %:title%")
+//    Page<Blog> findByTitle(@Param("title") String title, Pageable page);
+//
+//    @Query("SELECT b FROM com.example.demo.model.Blog b WHERE b.topic.id = :topicId AND b.title LIKE %:title%")
+//    Page<Blog> findBlogWithTopicAndTitle(
+//            @Param("topicId") Integer topicId,
+//            @Param("title") String title,
+//            Pageable page
+//    );
 
-    @Query("SELECT b FROM com.example.demo.model.Blog b WHERE b.title LIKE %:title%")
-    Page<Blog> findByTitle(@Param("title") String title, Pageable page);
-
-    @Query("SELECT b FROM com.example.demo.model.Blog b WHERE b.topic.id = :topicId AND b.title LIKE %:title%")
-    Page<Blog> findBlogWithTopicAndTitle(
-            @Param("topicId") Integer topicId,
-            @Param("title") String title,
-            Pageable page
-    );
+    Page<Blog> findByTopicOrTitleOrContent(Topic topic, String title, String content, Pageable page);
 
 }

@@ -8,18 +8,20 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Predicate;
+import java.util.List;
 
 @Component
-public class BlogSpecs {
+public class BlogSpecification {
 
     public static Specification<Blog> hasTitle(String title) {
         return (blog, cq, cb) -> cb.like(blog.get(Blog_.TITLE), "%" + title + "%");
     }
 
-    public static Specification<Blog> hasTopic(Integer topicId) {
+    public static Specification<Blog> hasTopic(List<Integer> topicIds) {
         return (blog, cq, cb) -> {
             Join<Blog, Topic> topicJoin = blog.join(Blog_.TOPIC);
-            return cb.equal(topicJoin.get(Topic_.ID), topicId);
+            return topicJoin.get(Topic_.ID).in(topicIds);
         };
     }
 

@@ -4,8 +4,9 @@ import java.util.Optional;
 
 import com.example.demo.controller.BlogDto;
 import com.example.demo.model.Blog;
+import com.example.demo.model.Topic;
 import com.example.demo.repository.BlogRepository;
-import com.example.demo.repository.specifications.BlogSpecs;
+import com.example.demo.repository.specifications.BlogSpecification;
 import com.example.demo.repository.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -58,30 +59,39 @@ public class BlogService {
         return ResponseEntity.notFound().build();
     }
 
-    public List<Object[]> getAllBlogsWithUsername() {
-        return blogRepository.findAllBlogsWithUsernames();
-    }
-
     public Blog getBlogById(int id) {
         return blogRepository.findById(id).orElse(null);
     }
 
-    public Page<Blog> searchByTopic(Integer topicId, Pageable pr) {
-        return blogRepository.findBlogWithTopic(topicId, pr);
-    }
-
     public Page<Blog> searchByTopicTitleContent(
-            Integer topicId,
+            List<Integer> topicId,
             String title,
             String content,
             Pageable pr
     ) {
 
         return blogRepository.findAll(
-                where(BlogSpecs.hasTitle(title))
-                        .or(BlogSpecs.hasContent(content))
-                        .or(BlogSpecs.hasTopic(topicId)),
+                where(BlogSpecification.hasTitle(title))
+                        .or(where(BlogSpecification.hasContent(content)))
+                        .or(where(BlogSpecification.hasTopic(topicId))),
                 pr
         );
+    }
+
+    public Page<Blog> searchByTopicOrTitleOrContent(
+        Integer topicId,
+        String title,
+        String content,
+        Pageable pr
+    ) {
+        Topic topic = topicRepository.findById(topicId).orElse(null);
+
+        return blogRepository.findByTopicOrTitleOrContent(
+                topic,
+                title,
+                content,
+                pr
+        );
+
     }
 }
