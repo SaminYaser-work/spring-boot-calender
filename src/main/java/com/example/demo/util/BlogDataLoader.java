@@ -1,5 +1,8 @@
-package com.example.demo.model;
+package com.example.demo.util;
 
+import com.example.demo.model.Blog;
+import com.example.demo.model.Topic;
+import com.example.demo.model.User;
 import com.example.demo.repository.BlogRepository;
 import com.example.demo.repository.TopicRepository;
 import com.example.demo.repository.UserRepository;

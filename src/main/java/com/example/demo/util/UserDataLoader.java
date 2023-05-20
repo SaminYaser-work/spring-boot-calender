@@ -1,5 +1,6 @@
-package com.example.demo.model;
+package com.example.demo.util;
 
+import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;

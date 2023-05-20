@@ -8,7 +8,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Predicate;
 import java.util.List;
 
 @Component

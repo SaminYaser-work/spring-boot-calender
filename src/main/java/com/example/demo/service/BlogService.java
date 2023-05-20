@@ -2,7 +2,7 @@ package com.example.demo.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.demo.controller.BlogDto;
+import com.example.demo.dto.BlogDto;
 import com.example.demo.model.Blog;
 import com.example.demo.model.Topic;
 import com.example.demo.repository.BlogRepository;

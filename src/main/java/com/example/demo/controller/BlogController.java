@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.util.List;
 
+import com.example.demo.dto.BlogDto;
 import com.example.demo.model.Blog;
 import com.example.demo.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
