@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.annotations.*;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,13 +28,21 @@ public class User {
     private boolean active;
     private String roles;
 
-    @OneToMany(targetEntity = Blog.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(referencedColumnName = "id", name = "fk_user_id")
+    @OneToMany(targetEntity = Blog.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+//    @JoinColumn(referencedColumnName = "id", name = "fk_user_id")
 //    @Getter(AccessLevel.NONE) // Uncomment to lazy load
 //    @Setter(AccessLevel.NONE)
+    @JsonIgnoreProperties({
+            "user",
+            "hibernateLazyInitializer",
+            "handler"
+    })
     private List<Blog> blogposts = new ArrayList<>();
 
-//    public void addBlog(Blog blog) {
-//        blogposts.add(blog);
-//    }
+    public void addBlog(Blog blog) {
+        if (!this.blogposts.contains(blog)) {
+            this.blogposts.add(blog);
+            blog.setUser(this);
+        }
+    }
 }

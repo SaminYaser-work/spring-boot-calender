@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import javax.persistence.criteria.Join;
 import java.util.List;
 
-@Component
 public class BlogSpecification {
 
     public static Specification<Blog> hasTitle(String title) {

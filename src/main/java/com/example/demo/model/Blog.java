@@ -33,5 +33,11 @@ public class Blog {
             "handler"
     })
     private Topic topic;
+
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
+    @JsonIgnoreProperties({
+            "blogposts",
+    })
+    private User user;
 }
 

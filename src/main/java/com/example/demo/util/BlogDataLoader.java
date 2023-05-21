@@ -29,6 +29,7 @@ public class BlogDataLoader implements CommandLineRunner {
     @Transactional
     public void run(String... args) throws Exception {
 
+        // Creating the topics
         Topic t1 = new Topic();
         t1.setTopicName("science");
         Topic t2 = new Topic();
@@ -64,24 +65,24 @@ public class BlogDataLoader implements CommandLineRunner {
                  blog.setTopic(null);
              }
 
-
              User user = new User();
              user.setUsername(faker.name().username());
              user.setPassword(faker.internet().password());
              user.setActive(true);
              user.setRoles("USER_ROLE");
+             user.addBlog(blog);
 
-             blogRepository.save(blog);
-
-             Blog savedBlog = blogRepository.findById(blog.getId()).get();
+//             blogRepository.save(blog);
+//
+//             Blog savedBlog = blogRepository.findById(blog.getId()).get();
+//
+//             userRepository.save(user);
+//
+//             User savedUser = userRepository.findById(user.getId()).get();
+//
+//             savedUser.getBlogposts().add(savedBlog);
 
              userRepository.save(user);
-
-             User savedUser = userRepository.findById(user.getId()).get();
-
-             savedUser.getBlogposts().add(savedBlog);
-
-             userRepository.save(savedUser);
          }
 
 

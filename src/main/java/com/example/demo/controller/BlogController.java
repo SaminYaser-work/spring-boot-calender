@@ -1,8 +1,11 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.example.demo.dto.BlogDto;
+import com.example.demo.dto.SearchBlogResponse;
 import com.example.demo.model.Blog;
 import com.example.demo.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +31,7 @@ public class BlogController {
     }
 
     @GetMapping("/search")
-    public Page<Blog> searchByTopic(
+    public List<SearchBlogResponse> searchByTopic(
             @RequestParam(required = false) List<Integer> topics,
             @RequestParam(required = false, defaultValue = "") String title,
             @RequestParam(required = false, defaultValue = "") String content,
@@ -38,31 +41,27 @@ public class BlogController {
             @RequestParam(required = false, defaultValue = "false") String desc
     ) {
 
-//        if (topics == null) {
-//            topics = new List<Integer>();
-//        }
+        if (topics == null) {
+            topics = new ArrayList<Integer>();
+            topics.addAll(Arrays.asList(1, 2, 3));
+        }
 
         Sort sort = desc.equals("true") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
 
-        Pageable pr = PageRequest.of(
-                Integer.parseInt(start),
-                Integer.parseInt(size),
-                sort
-        );
+//        Pageable pr = PageRequest.of(
+//                Integer.parseInt(start),
+//                Integer.parseInt(size),
+//                sort
+//        );
 
-        return blogService.searchByTopicTitleContent(
-                topics,
-                title,
-                content,
-                pr
-        );
-
-//        return blogService.searchByTopicOrTitleOrContent(
-//                topics[0],
+//        return blogService.searchByTopicTitleContent(
+//                topics,
 //                title,
 //                content,
 //                pr
 //        );
+
+        return blogService.searchBlogCB(topics, title, Integer.parseInt(start), Integer.parseInt(size));
     }
 
 //    @GetMapping
