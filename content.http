@@ -7,7 +7,6 @@ GET http://localhost:8080/blogs/1
 ### Search blogs by title
 GET http://localhost:8080/blogs/search
     ?topics=1
-    &title=Et
     &start=0
     &size=99
 

@@ -28,16 +28,25 @@ public class CustomBlogRepositoryImpl implements CustomBlogRepository {
 
         Root<Blog> root = cq.from(Blog.class);
 
-        Join<Blog, User> userJoin = root.join(Blog_.USER, JoinType.LEFT);
+        Join<Blog, Topic> topicJoin = root.join(Blog_.TOPIC, JoinType.INNER);
+
+        Join<Blog, User> userJoin = root.join(Blog_.USER, JoinType.INNER);
 
         cq.select(root);
 
-        cq.where(cb.equal(root.get("user").get("id"), userJoin.get("id")));
+        cq.where(
+                cb.and(
+                        cb.equal(root.get("topic").get("id"), topicJoin.get("id")),
+                        cb.equal(root.get("user").get("id"), userJoin.get("id"))
+                )
+        );
 
-        cq.where(cb.and(
-                root.get(Blog_.TOPIC).in(topicIds),
-                cb.like(root.get(Blog_.TITLE), "%" + title + "%")
-        ));
+        cq.where(
+                cb.and(
+                        root.get("topic").in(topicIds),
+                        cb.like(root.get("title"), "%" + title + "%")
+                )
+        );
 
         List<Blog> resultList = entityManager
                 .createQuery(cq)
