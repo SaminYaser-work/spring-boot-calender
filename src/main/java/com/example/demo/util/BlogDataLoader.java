@@ -7,8 +7,10 @@ import com.example.demo.repository.BlogRepository;
 import com.example.demo.repository.TopicRepository;
 import com.example.demo.repository.UserRepository;
 import com.github.javafaker.Faker;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,9 @@ public class BlogDataLoader implements CommandLineRunner {
 
     @Autowired
     private TopicRepository topicRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -67,33 +72,49 @@ public class BlogDataLoader implements CommandLineRunner {
 
              User user = new User();
              user.setUsername(faker.name().username());
-             user.setPassword(faker.internet().password());
+             user.setPassword(
+                     passwordEncoder.encode(
+                         faker.internet().password()
+                     )
+             );
              user.setActive(true);
-             user.setRoles("USER_ROLE");
+             user.setRoles("ROLE_USER");
              user.addBlog(blog);
-
-//             blogRepository.save(blog);
-//
-//             Blog savedBlog = blogRepository.findById(blog.getId()).get();
-//
-//             userRepository.save(user);
-//
-//             User savedUser = userRepository.findById(user.getId()).get();
-//
-//             savedUser.getBlogposts().add(savedBlog);
 
              userRepository.save(user);
          }
 
+        Blog blog = new Blog();
+        blog.setTitle(faker.lorem().sentence());
+        blog.setContent(faker.lorem().paragraph());
+        blog.setDate(faker.date().between(new Date(System.currentTimeMillis() - 86400000L * 365), new Date()));
+        blog.setTopic(
+                topicList.get(rand.nextInt(topicList.size()))
+        );
 
-//        IntStream.rangeClosed(1, 100)
-//                .mapToObj(i -> new Blog(
-//                        faker.lorem().sentence(),
-//                        faker.lorem().paragraph(),
-//                        faker.name().fullName(),
-//                        faker.date().between(new Date(System.currentTimeMillis() - 86400000L * 365), new Date())
-//                ))
-//                .forEach(blogRepository::save);
+        User user = new User();
+        user.setUsername("user");
+        user.setPassword(
+            passwordEncoder.encode("pass")
+        );
+        user.setActive(true);
+        user.setRoles("ROLE_USER");
+        user.addBlog(blog);
+
+        userRepository.save(user);
+
+        User admin = new User();
+        admin.setUsername("admin");
+        admin.setPassword(
+                passwordEncoder.encode("pass")
+        );
+        admin.setActive(true);
+        admin.setRoles("ROLE_ADMIN");
+        admin.addBlog(blog);
+
+        userRepository.save(admin);
+
+        System.out.println("Finished loading data");
     }
 }
 

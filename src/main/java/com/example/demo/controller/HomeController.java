@@ -1,21 +1,24 @@
 package com.example.demo.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class Home {
+public class HomeController {
 
     @GetMapping
     public String home() {
-        return "Free access";
+        return "Home Page";
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/user")
     public String user() {
         return "User access";
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin")
     public String admin() {
         return "Admin access";

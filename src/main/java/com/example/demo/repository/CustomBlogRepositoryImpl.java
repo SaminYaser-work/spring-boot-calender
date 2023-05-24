@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class CustomBlogRepositoryImpl implements CustomBlogRepository {
@@ -66,6 +67,6 @@ public class CustomBlogRepositoryImpl implements CustomBlogRepository {
                     .username(blog.getUser().getUsername())
                     .isActive(blog.getUser().isActive())
                     .build();
-        }).collect(java.util.stream.Collectors.toList());
+        }).collect(Collectors.toList());
     }
 }

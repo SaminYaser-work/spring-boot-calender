@@ -32,6 +32,9 @@ public class UserService {
 
     public void updateUser(Integer id, User user) {
         User existingUser = userRepository.findById(id).orElse(null);
+        if (existingUser == null) {
+            return;
+        }
         existingUser.setUsername(user.getUsername());
         existingUser.setPassword(user.getPassword());
         existingUser.setRoles(user.getRoles());
