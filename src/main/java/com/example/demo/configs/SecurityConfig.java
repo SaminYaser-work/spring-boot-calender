@@ -35,6 +35,9 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions().sameOrigin())
                 .userDetailsService(this.customUserDetailsService)
                 .formLogin(Customizer.withDefaults())
+                .logout()
+                .logoutSuccessUrl("/")
+                .and()
                 .build();
     }
 

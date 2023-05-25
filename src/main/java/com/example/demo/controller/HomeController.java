@@ -9,18 +9,18 @@ public class HomeController {
 
     @GetMapping
     public String home() {
-        return "Home Page";
+        return "Home Page\n<a href='/user'>User Login</a>\n<a href='/admin-page'>Admin Login</a>";
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @GetMapping("/user")
     public String user() {
-        return "User access";
+        return "User Page\n<a href='/logout'>Logout</a>";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/admin")
+    @GetMapping("/admin-page")
     public String admin() {
-        return "Admin access";
+        return "Admin Page\n<a href='/logout'>Logout</a>";
     }
 }
