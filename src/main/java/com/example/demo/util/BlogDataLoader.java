@@ -34,6 +34,8 @@ public class BlogDataLoader implements CommandLineRunner {
     @Transactional
     public void run(String... args) throws Exception {
 
+        System.out.println("Seeding database...");
+
         // Creating the topics
         Topic t1 = new Topic();
         t1.setTopicName("science");
@@ -114,7 +116,7 @@ public class BlogDataLoader implements CommandLineRunner {
 
         userRepository.save(admin);
 
-        System.out.println("Finished loading data");
+        System.out.println("Finished seeding");
     }
 }
 
