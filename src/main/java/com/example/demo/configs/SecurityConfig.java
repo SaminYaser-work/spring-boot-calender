@@ -50,7 +50,6 @@ public class SecurityConfig {
                 .authorizeRequests(auth -> {
                     auth
                             .antMatchers("/").permitAll()
-                            .antMatchers("/login").permitAll()
                             .antMatchers("/authenticate").permitAll()
                             .antMatchers("/h2-console/**").permitAll()
                             .anyRequest().authenticated();
@@ -60,8 +59,7 @@ public class SecurityConfig {
                     .formLogin()
                     .loginPage("/login")
                     .defaultSuccessUrl("/authenticate")
-                    .failureUrl("/login?error=true")
-                    .failureForwardUrl("/login?error=true")
+                    .permitAll()
                 .and()
                     .logout()
                     .logoutSuccessUrl("/")

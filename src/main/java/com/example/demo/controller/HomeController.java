@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -111,9 +112,11 @@ public class HomeController {
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
 
         String token = jwtUtility.generateToken(userDetails);
+        String refreshToken = jwtUtility.generateRefreshToken(userDetails);
 
         Map<String, String> response = new HashMap<>();
         response.put("token", token);
+        response.put("refreshToken", refreshToken);
 
         return ResponseEntity.ok(response);
     }
